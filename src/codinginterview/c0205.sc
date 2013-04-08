@@ -3,11 +3,11 @@ package codinginterview
 object c0205 {
 	class Node(var link: Node, var value: String)
 	
-	val e = new Node(null, "e")               //> e  : codinginterview.c0205.Node = codinginterview.c0205$Node@7709c5c
-	val d = new Node(e, "d")                  //> d  : codinginterview.c0205.Node = codinginterview.c0205$Node@6d45ca41
-	val c = new Node(d, "c")                  //> c  : codinginterview.c0205.Node = codinginterview.c0205$Node@e1a973
-	val b = new Node(c, "b")                  //> b  : codinginterview.c0205.Node = codinginterview.c0205$Node@5f3bbd78
-	val a = new Node(b, "a")                  //> a  : codinginterview.c0205.Node = codinginterview.c0205$Node@4b144220
+	val e = new Node(null, "e")               //> e  : codinginterview.c0205.Node = codinginterview.c0205$Node@21b585b1
+	val d = new Node(e, "d")                  //> d  : codinginterview.c0205.Node = codinginterview.c0205$Node@df9411
+	val c = new Node(d, "c")                  //> c  : codinginterview.c0205.Node = codinginterview.c0205$Node@5671e889
+	val b = new Node(c, "b")                  //> b  : codinginterview.c0205.Node = codinginterview.c0205$Node@5059a6b5
+	val a = new Node(b, "a")                  //> a  : codinginterview.c0205.Node = codinginterview.c0205$Node@2dcfde49
 	d.link = b
 	
 	def circular(startNode: Node): Option[Node] = {
