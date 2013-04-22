@@ -1,8 +1,8 @@
-package coding
+package cracking.the.coding
 
 case class Graph(link: Graph, value: String)
 
-object cA {
+object C0402 extends App {
 
 	val d = Graph(null, "d")
 	val c = Graph(d, "c")
@@ -15,7 +15,6 @@ object cA {
 		else hasRoute(start.link, destination)
 	}
 
-	hasRoute(a, d)
-
+	println(hasRoute(a, d))
 
 }
