@@ -64,6 +64,10 @@ object VariableBaseExpressionEvaluation extends App {
 	val bar = parse("3710_8 - 111001001_2 + 2F_16 / 20_10") // 1992 - 457 + 47 / 20 = 1537.35
 	println(bar)
 	println(evaluate(bar.get))
+
+	val bar2 = parse("3710_8 * 111001001_2 + 2F_16 / 20_10") // 1992 * 457 + 47 / 20 = 910346.35
+	println(bar2)
+	println(evaluate(bar2.get))
 	
 }
 

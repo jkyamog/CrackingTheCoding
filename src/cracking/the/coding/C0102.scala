@@ -8,7 +8,7 @@ object C0102 extends App {
 		else {
 			var reverse = collection.mutable.ListBuffer[String]()
 			
-			for (i <- (0 until (str.size - 1)) reverse) {
+			for (i <- (0 until (str.size - 1)).reverse) {
 				reverse += str(i)
 			}
 			
