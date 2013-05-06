@@ -1,18 +1,21 @@
 package cracking.the.coding
 
+import scala.collection.mutable.ListBuffer
+import scala.annotation.tailrec
+
 object TreeWalker extends App {
 	
 	case class Node(left: Node, right: Node, value: Int)
 	
 	val n1 = Node(null, null, 1)
-	val n2 = Node(null, null, 2)
-	val n3 = Node(n1, n2, 3)
+	val n3 = Node(null, null, 3)
+	val n2 = Node(n1, n3, 2)
 	
-	val n6 = Node(null, null, 6)
 	val n7 = Node(null, null, 7)
-	val n5 = Node(n6, n7, 5)
+	val n5 = Node(null, null, 5)
+	val n6 = Node(n5, n7, 6)
 	
-	val n4 = Node(n3, n5, 4)
+	val n4 = Node(n2, n6, 4)
 	
 	def walkDFS(root: Node): List[Int] = {
 		
@@ -24,6 +27,34 @@ object TreeWalker extends App {
 		walk(root)
 	}
 	
+	def walkBFS(root: Node): List[Int] = {
+		
+		@tailrec
+		def walk(toWalk: ListBuffer[Node], walked: ListBuffer[Int]): List[Int] = {
+			if (toWalk.isEmpty) walked.toList
+			else {
+				val current = toWalk.head
+				
+				if (current.left != null) {
+					walked += current.left.value
+					toWalk += current.left
+				}
+				if (current.right != null) {
+					walked += current.right.value
+					toWalk += current.right
+				}
+				
+				walk(toWalk.tail, walked)
+			}
+		}
+		
+		if (root == null) 
+			Nil
+		else
+			walk(ListBuffer(root), ListBuffer(root.value))
+	}
+	
 	println(walkDFS(n4))
+	println(walkBFS(n4))
 
 }
