@@ -9,13 +9,9 @@ public class StackSort {
 		Stack<Integer> a = new Stack<Integer>();
 		Stack<Integer> b = new Stack<Integer>();
 		
-//		a.push(3);
-//		a.push(2);
-//		a.push(4);
-//		a.push(1);
-		a.push(4);
 		a.push(3);
 		a.push(2);
+		a.push(4);
 		a.push(1);
 
 		while(!a.empty()) {
@@ -25,7 +21,7 @@ public class StackSort {
 			} else {
 				Integer t = a.pop();
 				System.out.println("second " + t);
-				while (t.compareTo(b.peek()) == -1 && !b.empty()) {
+				while (!b.empty() && t.compareTo(b.peek()) == 1) {
 					a.push(b.pop());
 				}
 				b.push(t);
