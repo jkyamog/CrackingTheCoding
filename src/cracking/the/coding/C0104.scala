@@ -25,8 +25,7 @@ object C0104 extends App {
 	def isAnagram2(str1: String, str2: String) = {
 		def isAnaInternal(head1: Char, tail1: String, str2: String): Boolean = {
 			if (tail1.isEmpty && str2.size == 1 && str2.contains(head1.toString)) true
-			else if (tail1.isEmpty) false
-			else if (str2.contains(head1.toString)) isAnaInternal(tail1.head, tail1.tail, str2.replaceFirst(head1.toString, ""))
+			else if (!tail1.isEmpty && str2.contains(head1.toString)) isAnaInternal(tail1.head, tail1.tail, str2.replaceFirst(head1.toString, ""))
 			else false
 		}
 
