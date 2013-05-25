@@ -22,10 +22,12 @@ paths which sum up to that value. note that it can be any path in the tree - it 
 	}
 	
 	def validPaths(paths: List[List[Node]], sum: Int) = {
-		paths.flatMap {
-			case path if path.map(_.value).sum == sum => Some(path)
-			case _ => None
-		}
+		paths.flatMap { path =>
+			for {
+				i <- 1 to path.size
+				if (path.take(i).map(_.value).sum == sum)
+			} yield (path.take(i))
+		}.toSet
 	}
 	
 	val h = Node(4)
@@ -45,7 +47,10 @@ paths which sum up to that value. note that it can be any path in the tree - it 
 	
 	println("--------------")
 	
-	val vPaths = validPaths(paths, 14)
-	vPaths foreach println
-	
+	validPaths(paths, 14) foreach println
+	println("--------------")
+	validPaths(paths, 12) foreach println
+	println("--------------")
+	validPaths(dfsPaths(c), 7) foreach println
+
 }
