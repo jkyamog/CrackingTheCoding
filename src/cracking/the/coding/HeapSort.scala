@@ -2,7 +2,7 @@ package cracking.the.coding
 
 object HeapSort extends App {
 	
-	class MaxHeap[T <% Ordered[T]](initial: Seq[T]) {
+	abstract class Heap[T <% Ordered[T]](initial: Seq[T]) {
 		
 		val buffer = collection.mutable.Buffer[T]()
 		
@@ -15,7 +15,7 @@ object HeapSort extends App {
 		
 		private def siftUp {
 		  var index = buffer.size - 1
-		  while (buffer(index) > buffer(parent(index))) {
+		  while (compare(buffer(index), buffer(parent(index)))) {
 		  	swap(parent(index), index)
 		  	index = parent(index)
 		  }
@@ -36,8 +36,8 @@ object HeapSort extends App {
 		
 		private def siftDown {
 			var index = 0
-			while (lessThanChild(index)) {
-				if (left(index) == (buffer.size - 1) || (buffer(left(index)) > buffer(right(index)))) {
+			while (compareChild(index)) {
+				if (left(index) == (buffer.size - 1) || compare(buffer(left(index)), buffer(right(index)))) {
 					swap(left(index), index)
 					index = left(index)
 				} else {
@@ -47,15 +47,17 @@ object HeapSort extends App {
 			}
 		}
 		
+		def compare(a: T, b: T): Boolean
+		
 		def swap(indexA: Int, indexB: Int) = {
 			val temp = buffer(indexA)
 			buffer(indexA) = buffer(indexB)
 			buffer(indexB) = temp
 		}
 		
-		def lessThanChild(index: Int) = 
-			(((left(index) < buffer.size) && buffer(left(index)) > buffer(index)) 
-					|| ((right(index) < buffer.size) && buffer(right(index)) > buffer(index)))
+		def compareChild(index: Int) = 
+			(((left(index) < buffer.size) && compare(buffer(left(index)), buffer(index))) 
+					|| ((right(index) < buffer.size) && compare(buffer(right(index)), buffer(index))))
 		
 		def left(index: Int) = index * 2 + 1
 
@@ -72,15 +74,34 @@ object HeapSort extends App {
 	  
 	}
 	
-	val heap = new MaxHeap[Int](Seq(9, 10, 9, 15, 8))
+	class MaxHeap[T <% Ordered[T]](initial: Seq[T]) extends Heap(initial) {
+		def compare(a: T, b: T) = {
+			a > b
+		}
+	}
 	
-	def sort[T](heap: MaxHeap[T]) = {
+	class MinHeap[T <% Ordered[T]](initial: Seq[T]) extends Heap(initial) {
+		def compare(a: T, b: T) = {
+			a < b
+		}
+	}
+
+	def sort[T](heap: Heap[T]) = {
 		for {
 			i <- 0 until heap.size
 		} yield (heap.delete)
 	}
 	
-	val sorted = sort(heap)
+	val heapMax = new MaxHeap[Int](Seq(9, 10, 9, 15, 8))
+	println(heapMax.buffer.mkString(","))
+	val sortedDesc = sort(heapMax)
+	println(sortedDesc.mkString(","))
 	
-	sorted foreach println
+	println
+	
+	val heapMin = new MinHeap[Int](Seq(9, 10, 9, 15, 8))
+	println(heapMin.buffer.mkString(","))
+	val sortedAsc = sort(heapMin)
+	println(sortedAsc.mkString(","))
+	
 }
