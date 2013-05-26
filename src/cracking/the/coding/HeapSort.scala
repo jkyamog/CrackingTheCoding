@@ -2,29 +2,39 @@ package cracking.the.coding
 
 object HeapSort extends App {
 	
-	class MaxHeap(initial: Seq[Int]) {
+	class MaxHeap[T <% Ordered[T]](initial: Seq[T]) {
 		
-		val buffer = collection.mutable.Buffer[Int]()
+		val buffer = collection.mutable.Buffer[T]()
 		
 		initial foreach insert
 		
-		def insert(value: Int) = {
-			buffer += value
-			
-			var index = buffer.size - 1
-			while (buffer(index) > buffer(parent(index))) {
-				swap(parent(index), index)
-				index = parent(index)
-			}
+		def insert(value: T) = {
+	  	buffer += value
+		  siftUp
 		}
 		
-		def delete: Int = {
+		private def siftUp {
+		  var index = buffer.size - 1
+		  while (buffer(index) > buffer(parent(index))) {
+		  	swap(parent(index), index)
+		  	index = parent(index)
+		  }
+		}
+
+		
+		def delete: T = {
 			if (buffer.size == 0) throw new RuntimeException("empty heap, nothing to delete")
 			
 			val root = buffer(0)
 			swap(0, buffer.size - 1)
 			buffer.remove(buffer.size - 1)
 			
+			siftDown
+			
+			root
+		}
+		
+		private def siftDown {
 			var index = 0
 			while (lessThanChild(index)) {
 				if (left(index) == (buffer.size - 1) || (buffer(left(index)) > buffer(right(index)))) {
@@ -35,14 +45,12 @@ object HeapSort extends App {
 					index = right(index)
 				}
 			}
-			
-			root
 		}
 		
 		def swap(indexA: Int, indexB: Int) = {
-			buffer(indexA) = buffer(indexA) ^ buffer(indexB)
-			buffer(indexB) = buffer(indexA) ^ buffer(indexB)
-			buffer(indexA) = buffer(indexA) ^ buffer(indexB)
+			val temp = buffer(indexA)
+			buffer(indexA) = buffer(indexB)
+			buffer(indexB) = temp
 		}
 		
 		def lessThanChild(index: Int) = 
@@ -58,15 +66,21 @@ object HeapSort extends App {
 			else (index - 1) / 2
 			
 		override def toString = buffer.mkString(",")
+		
+		def size = buffer.size
+		def isEmpty = buffer.isEmpty
+	  
 	}
 	
-	val heap = new MaxHeap(Seq(9, 10, 9, 15, 8))
+	val heap = new MaxHeap[Int](Seq(9, 10, 9, 15, 8))
 	
-	println(heap)
-	println(heap.delete)
-	println(heap.delete)
-	println(heap.delete)
-	println(heap.delete)
-	println(heap.delete)
-
+	def sort[T](heap: MaxHeap[T]) = {
+		for {
+			i <- 0 until heap.size
+		} yield (heap.delete)
+	}
+	
+	val sorted = sort(heap)
+	
+	sorted foreach println
 }
