@@ -2,7 +2,7 @@ package cracking.the.coding
 
 object HeapSort extends App {
 	
-	class MaxHeap(initial: Seq[Int]) { // max Heap
+	class MaxHeap(initial: Seq[Int]) {
 		
 		val buffer = collection.mutable.Buffer[Int]()
 		
@@ -26,7 +26,7 @@ object HeapSort extends App {
 			buffer.remove(buffer.size - 1)
 			
 			var index = 0
-			while (greaterThanChild(index)) {
+			while (lessThanChild(index)) {
 				if (left(index) == (buffer.size - 1) || (buffer(left(index)) > buffer(right(index)))) {
 					swap(left(index), index)
 					index = left(index)
@@ -45,9 +45,9 @@ object HeapSort extends App {
 			buffer(indexA) = buffer(indexA) ^ buffer(indexB)
 		}
 		
-		def greaterThanChild(index: Int) = 
-			(((left(index) < buffer.size) && buffer(left(index)) < buffer(index)) 
-					|| ((right(index) < buffer.size) && buffer(right(index)) < buffer(index)))
+		def lessThanChild(index: Int) = 
+			(((left(index) < buffer.size) && buffer(left(index)) > buffer(index)) 
+					|| ((right(index) < buffer.size) && buffer(right(index)) > buffer(index)))
 		
 		def left(index: Int) = index * 2 + 1
 
@@ -64,6 +64,9 @@ object HeapSort extends App {
 	
 	println(heap)
 	println(heap.delete)
-	println(heap)
+	println(heap.delete)
+	println(heap.delete)
+	println(heap.delete)
+	println(heap.delete)
 
 }
