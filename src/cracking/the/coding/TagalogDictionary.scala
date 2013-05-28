@@ -8,7 +8,8 @@ object TagalogDictionary extends App {
 	
 	val alphabet = Seq("a","b","k","d","e","g","h","i","l","m","n","ng","o","p","r","s","t","u","w","y")
 	
-	def sortWords(words: Seq[String]) = words map toAscii sortBy(_._1) map (_._2)
+	def sortWords(words: Seq[String]) = 
+		words map toAscii sortBy{case (ascii, _) => ascii} map {case (_, tagalog) => tagalog}
 	
 	def toAscii(word: String) = {
 		val buffer = new StringBuilder
@@ -17,11 +18,10 @@ object TagalogDictionary extends App {
 		while (slider.hasNext) {
 			val window = slider.next
 			
-			val ascii = if (window == "ng") {
-				mapChar(window) toString
-			} else {
-				window map { ch => mapChar(ch.toString) }
-			}
+			val ascii = if (window == "ng")
+					mapChar(window) toString
+				else
+					window map { ch => mapChar(ch.toString) }
 			
 			buffer ++= ascii
 		}
