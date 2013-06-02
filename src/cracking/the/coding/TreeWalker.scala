@@ -5,7 +5,9 @@ import scala.annotation.tailrec
 
 object TreeWalker extends App {
 	
-	case class Node(left: Node, right: Node, value: Int)
+	case class Node(left: Node, right: Node, value: Int) {
+		override def toString = value.toString
+	}
 	
 	val n1 = Node(null, null, 1)
 	val n3 = Node(null, null, 3)
@@ -17,30 +19,35 @@ object TreeWalker extends App {
 	
 	val n4 = Node(n2, n6, 4)
 	
-	def walkDFS(root: Node): List[Int] = {
+	val nb1 = Node(null, null, 1)
+	val nb3 = Node(null, null, 3)
+	val nb2 = Node(nb1, nb3, 2)
+
+	
+	def walkDFS(root: Node): List[Node] = {
 		
-		def walk(current: Node): List[Int] = {
+		def walk(current: Node): List[Node] = {
 			if (current == null) Nil
-			else current.value :: walk(current.left) ::: walk(current.right)
+			else current :: walk(current.left) ::: walk(current.right)
 		}
 		
 		walk(root)
 	}
 	
-	def walkBFS(root: Node): List[Int] = {
+	def walkBFS(root: Node): List[Node] = {
 		
 		@tailrec
-		def walk(toWalk: ListBuffer[Node], walked: ListBuffer[Int]): List[Int] = {
+		def walk(toWalk: ListBuffer[Node], walked: ListBuffer[Node]): List[Node] = {
 			if (toWalk.isEmpty) walked.toList
 			else {
 				val current = toWalk.head
 				
 				if (current.left != null) {
-					walked += current.left.value
+					walked += current.left
 					toWalk += current.left
 				}
 				if (current.right != null) {
-					walked += current.right.value
+					walked += current.right
 					toWalk += current.right
 				}
 				
@@ -51,10 +58,26 @@ object TreeWalker extends App {
 		if (root == null) 
 			Nil
 		else
-			walk(ListBuffer(root), ListBuffer(root.value))
+			walk(ListBuffer(root), ListBuffer(root))
 	}
 	
-	println(walkDFS(n4))
-	println(walkBFS(n4))
-
+	def isSubtreeRef(root: Node, subTree: Node) = {
+		val nodes = walkBFS(root)
+		nodes.exists(_ eq subTree)
+	}
+	
+	def isSubtreeValue(root: Node, subTree: Node) = {
+		val nodes = walkBFS(root).map(_.value)
+		val subNodes = walkBFS(subTree).map(_.value)
+		
+		val remaining = subNodes.dropWhile(nodes.contains(_))
+		remaining.isEmpty
+	}
+	
+	println(walkDFS(n4).map(_.value))
+	println(walkBFS(n4).map(_.value))
+	
+	println(isSubtreeRef(n4, n2))
+	println(isSubtreeRef(n4, nb2))
+	println(isSubtreeValue(n4, nb2))
 }
