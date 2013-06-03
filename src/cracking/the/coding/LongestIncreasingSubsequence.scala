@@ -40,15 +40,27 @@ object LongestIncreasingSubsequence extends App {
 		}
 	}
 	
-	def LISS3(list: Stream[Int]): Stream[Stream[Int]] = {
-		if (list.isEmpty) Stream.empty
-		else
-			for {
-				l <- list
-			} yield {
-				LISS2(l, list.tail) 
-			}
+	def LISS3(list: List[Int]): List[Stream[Int]] = {
+		
+		val paths = for {
+			i <- 0 until list.length
+			j <- (i + 1) until list.length
+		} yield {
+			val current = list(i)
+			val next = list(j)
+			println(s"current $current next $next")
+			if (current < next)
+				current #:: Stream(next)
+			else
+				current #:: Stream.empty
+		}
+		
+		paths foreach println
+		
+		paths.toList
+		
 	}
+	
 	
 	val lis1 = LIS(1, List(2))
 	val lis2 = LIS(2, List(1))
@@ -57,13 +69,13 @@ object LongestIncreasingSubsequence extends App {
 //	lis3 sortBy (_.length) foreach println
 
 //	val snums = nums.toStream
-	val snums = List(2, 6, 4, 5, 1, 3).toStream
-//	val snums = List(2, 1).toStream
-	val lis4 = LISS2(snums.head, snums.tail)
+	val tnums = List(2, 6, 4, 5, 1, 3)
+//	val tnums = List(1, 2)
+	val lis4 = LISS3(tnums)
 	
-	lis4.take(snums.length) foreach { l =>
-//		println(l.take(7).toList)
-		println(l)
+	lis4.take(tnums.length) foreach { l =>
+		println(l.take(7).toList)
+//		println(l)
 	}
 
 	
