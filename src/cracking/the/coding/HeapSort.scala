@@ -104,4 +104,12 @@ object HeapSort extends App {
 	val sortedAsc = sort(heapMin)
 	println(sortedAsc.mkString(","))
 	
+	val pqueue = collection.mutable.PriorityQueue[Int]()
+	pqueue.enqueue(9, 10, 11, 9, 15, 8)
+	val rqueue = pqueue.reverse.filter(_ != 11)
+	while (!rqueue.isEmpty)
+		println(rqueue.dequeue)
+	
+	
+	
 }
