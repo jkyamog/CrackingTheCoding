@@ -1,9 +1,8 @@
 package cracking.the.coding;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import scala.actors.threadpool.Arrays;
 
 public class Sorting {
 	
