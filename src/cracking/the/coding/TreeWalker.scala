@@ -73,6 +73,27 @@ object TreeWalker extends App {
 		val remaining = subNodes.dropWhile(nodes.contains(_))
 		remaining.isEmpty
 	}
+
+  def preOrder(root: Node): Unit = {
+    if (root != null) {
+      print(root.value + " ")
+      preOrder(root.left)
+      preOrder(root.right)
+    }
+  }
+
+  def preOrderIterative(root: Node): Unit = {
+    val stack = new java.util.Stack[Node]
+    var current = root;
+
+    stack.push(root.left)
+    do {
+      print(current.value + " ")
+      if (current.right != null) stack.push(current.right)
+      if (current.left != null) current = current.left else current = stack.pop()
+    } while (!stack.empty())
+
+  }
 	
 	println(walkDFS(n4).map(_.value))
 	println(walkBFS(n4).map(_.value))
@@ -80,4 +101,9 @@ object TreeWalker extends App {
 	println(isSubtreeRef(n4, n2))
 	println(isSubtreeRef(n4, nb2))
 	println(isSubtreeValue(n4, nb2))
+
+  println("preOrder")
+  preOrder(n4)
+  println("\npreOrderIterative")
+  preOrderIterative(n4)
 }
