@@ -74,12 +74,10 @@ object TreeWalker extends App {
 		remaining.isEmpty
 	}
 
-  def preOrder(root: Node): Unit = {
+  def preOrder(root: Node): List[Int] = {
     if (root != null) {
-      print(root.value + " ")
-      preOrder(root.left)
-      preOrder(root.right)
-    }
+      root.value :: preOrder(root.left) ::: preOrder(root.right)
+    } else Nil
   }
 
   def preOrderIterative(root: Node): Unit = {
@@ -94,6 +92,28 @@ object TreeWalker extends App {
     } while (!stack.empty())
 
   }
+
+  def inOrder(root: Node): List[Int] = {
+    if (root != null) {
+      (inOrder(root.left) :+ root.value) ::: inOrder(root.right)
+    } else Nil
+  }
+
+  def reconstructTree(preOrder: Seq[Int], inOrder: Seq[Int]): Node = {
+    if (preOrder.isEmpty) null else {
+
+      val root = preOrder.head
+      val (leftNodes, rightNodes) = {
+        val (lNodes, rNodes) = inOrder.span(_ != root)
+        if (rNodes.isEmpty) (lNodes, Nil) else (lNodes, rNodes.tail)
+      }
+      val leftPreOrder = preOrder.filter(leftNodes.contains)
+      val rightPreOrder = preOrder.filter(rightNodes.contains)
+      val leftNode = reconstructTree(leftPreOrder, leftNodes)
+      val rightNode = reconstructTree(rightPreOrder, rightNodes)
+      Node(leftNode, rightNode, root)
+    }
+  }
 	
 	println(walkDFS(n4).map(_.value))
 	println(walkBFS(n4).map(_.value))
@@ -103,7 +123,18 @@ object TreeWalker extends App {
 	println(isSubtreeValue(n4, nb2))
 
   println("preOrder")
-  preOrder(n4)
-  println("\npreOrderIterative")
+  println(preOrder(n4).mkString(" "))
+  println("preOrderIterative")
   preOrderIterative(n4)
+  println("\ninOrder")
+  println(inOrder(n4).mkString(" "))
+
+  val newRoot = reconstructTree(preOrder(n4), inOrder(n4))
+  println(walkDFS(n4).map(_.value))
+
+  val testRoot = reconstructTree(Seq(50, 30, 15, 40, 35, 45, 70, 60, 88, 75, 72, 77),
+                                Seq(15, 30, 35, 40, 45, 50, 60, 70, 72, 75, 77, 88))
+  println(walkDFS(testRoot).map(_.value))
+
+
 }
